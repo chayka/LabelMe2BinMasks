@@ -130,7 +130,7 @@ for file in iglob(INPUT_DIR + '{}/*.json'.format(args.dataset)):
             categories[cat] += 1
             mask = cv2.resize(mask, (args.width, args.height))
             cv2.imwrite("{}/{:08d}_mask_{}.tif".format(DATASET_DIR, imageId, cat), mask)
-            if cat == 'solar_panel':
+            if cat == 'solar_panels':
                 cv2.imwrite("{}/{:08d}.tif".format(MASKS_DIR, imageId), mask)
 
 print(categories)
