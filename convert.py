@@ -35,7 +35,7 @@ args = parser.parse_args()
 INPUT_DIR = "./input/"
 OUTPUT_DIR = "./output/"
 DATASET_DIR = OUTPUT_DIR + "{}/".format(args.dataset)
-IMAGES_DIR = DATASET_DIR + "/images"
+IMAGES_DIR = DATASET_DIR + "images"
 # MASKS_DIR = DATASET_DIR + "/masks"
 
 def empty_dir(path):
@@ -116,7 +116,7 @@ for file in iglob(INPUT_DIR + '{}/*.json'.format(args.dataset)):
             annId += 1
             label = shape['label']
 
-            for cat in re.split("\s+", label):
+            for cat in re.split("\s+", label, 0, re.UNICODE):
                 cat = str.lower(cat).replace(' ', '_')
 
                 """ init mask if needed """
