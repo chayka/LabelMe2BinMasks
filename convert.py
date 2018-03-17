@@ -21,6 +21,18 @@ parser.add_argument('-w, --width', dest='width', type=int,
 parser.add_argument('-h, --height', dest='height', type=int,
                     help='output height', default=512)
 
+parser.add_argument('-ct, --crop-top', dest='crop_top', type=int,
+                    help='crop image at top by provided amount of pixels', default=0)
+
+parser.add_argument('-cb, --crop-bottom', dest='crop_bottom', type=int,
+                    help='crop image at bottom by provided amount of pixels', default=0)
+
+parser.add_argument('-cl, --crop-left', dest='crop_left', type=int,
+                    help='crop image at left by provided amount of pixels', default=0)
+
+parser.add_argument('-cr, --crop-right', dest='crop_right', type=int,
+                    help='crop image at right by provided amount of pixels', default=0)
+
 parser.add_argument('-g, --greyscale', dest='greyscale', action='store_true',
                     help='convert images to greyscale', default=False)
 
@@ -99,7 +111,11 @@ for file in iglob(INPUT_DIR + '{}/*.json'.format(args.dataset)):
 
         """ Get image width x height """
         im = cv2.imread(file_name)
-        (width, height, _) = im.shape
+        (height, width, _) = im.shape
+        crop_height = height - args.crop_top - args.crop_bottom
+        crop_width = width - args.crop_left - args.crop_right
+        im = im[args.crop_top: height - args.crop_bottom, args.crop_left: width - args.crop_right]
+        # im = im[args.crop_top: crop_height, :]
 
         im = cv2.resize(im, (args.width, args.height))
         if args.greyscale:
@@ -133,6 +149,8 @@ for file in iglob(INPUT_DIR + '{}/*.json'.format(args.dataset)):
                 categories[cat] = 0
                 ensure_dir("{}/masks_{}".format(DATASET_DIR, cat))
             categories[cat] += 1
+            # mask = mask[args.crop_top: height - args.crop_bottom, args.crop_left: width - args.crop_right]
+            mask = mask[args.crop_top: height - args.crop_bottom, :]
             mask = cv2.resize(mask, (args.width, args.height))
             # cv2.imwrite("{}/{:08d}_mask_{}.tif".format(DATASET_DIR, imageId, cat), mask)
             cv2.imwrite("{}/masks_{}/{:08d}.tif".format(DATASET_DIR, cat, imageId), mask)
