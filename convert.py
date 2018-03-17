@@ -117,7 +117,7 @@ for file in iglob(INPUT_DIR + '{}/*.json'.format(args.dataset)):
             label = shape['label']
 
             for cat in re.split("\s+", label, 0, re.UNICODE):
-                cat = str.lower(cat).replace(' ', '_')
+                cat = str.lower(cat).replace(' ', '_').encode('utf-8')
 
                 """ init mask if needed """
                 if cat not in masks:
