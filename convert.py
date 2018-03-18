@@ -137,7 +137,7 @@ for file in iglob(INPUT_DIR + '{}/*.json'.format(args.dataset)):
 
                 """ init mask if needed """
                 if cat not in masks:
-                    masks[cat] = np.zeros((width, height, 1), np.uint8)
+                    masks[cat] = np.zeros((height, width, 1), np.uint8)
                 mask = masks[cat]
 
                 """ draw a segment """
@@ -150,7 +150,7 @@ for file in iglob(INPUT_DIR + '{}/*.json'.format(args.dataset)):
                 ensure_dir("{}/masks_{}".format(DATASET_DIR, cat))
             categories[cat] += 1
             # mask = mask[args.crop_top: height - args.crop_bottom, args.crop_left: width - args.crop_right]
-            mask = mask[args.crop_top: height - args.crop_bottom, :]
+            mask = mask[args.crop_top: height - args.crop_bottom, args.crop_left: width - args.crop_right]
             mask = cv2.resize(mask, (args.width, args.height))
             # cv2.imwrite("{}/{:08d}_mask_{}.tif".format(DATASET_DIR, imageId, cat), mask)
             cv2.imwrite("{}/masks_{}/{:08d}.tif".format(DATASET_DIR, cat, imageId), mask)
